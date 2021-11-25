@@ -58,7 +58,7 @@ while True:
     # Finding maximum/a
     maximum = max(probabilities)
     max_ind = probabilities.index(maximum)
-    if probabilities[max_ind + 1] == maximum:
+    if probabilities[max_ind + 1] != maximum:
         info_str += "The highest probability is rolling a {} with a probability of {} %".format(sums[max_ind], maximum)
     else:
         info_str += "The highest probabilities are for rolling a {} or {} with a probability of {} %".format(sums[max_ind], sums[max_ind] + 1, maximum)
