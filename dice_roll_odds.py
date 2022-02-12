@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+##################################################################
+#                                                                #
+# © 2021 - MPL 2.0 - Rsge, ColonelRoyMustang - v2.0.1            #
+# https://github.com/Rsge/Tabletop-RPG-Dice-Roll-Odds-Calculator #
+#                                                                #
+##################################################################
+
+
 # Imports
 from functools import lru_cache
 import matplotlib.pyplot as plt
