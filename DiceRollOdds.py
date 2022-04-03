@@ -61,7 +61,7 @@ while True:
     for i in range(rolls, rolls * sides + 1):
         sums.append(i)
         probabilities.append(round(probability_calculator(i, rolls, sides) * 100, 6))
-    info_str = "The probability of your throw was {} %\n".format(probabilities[playersum - rolls])
+    info_str = "The probability of your throw using {}d{} was {} %\n".format(rolls, sides, probabilities[playersum - rolls])
 
     # Finding maximum/a
     maximum = max(probabilities)
