@@ -21,17 +21,17 @@ while True:
           "Please make sure to only input integers.\n"
           "----------------------------------------------------\n")
     while True:
-        sides = input("How many sides? ")
-        if sides.isdigit():
-            sides = int(sides)
-            if sides > 0:
-                break
-        print("Please input only positive integers!")
-    while True:
         rolls = input("How many rolls? ")
         if rolls.isdigit():
             rolls = int(rolls)
             if rolls > 0:
+                break
+        print("Please input only positive integers!")
+    while True:
+        sides = input("How many sides? ")
+        if sides.isdigit():
+            sides = int(sides)
+            if sides > 0:
                 break
         print("Please input only positive integers!")
     while True:
