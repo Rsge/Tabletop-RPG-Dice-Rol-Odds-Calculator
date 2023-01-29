@@ -2,7 +2,7 @@
 
 ##################################################################
 #                                                                #
-# © 2021 - MPL 2.0 - Rsge, ColonelRoyMustang - v2.1.0            #
+# © 2021 - MPL 2.0 - Rsge, ColonelRoyMustang - v2.1.1            #
 # https://github.com/Rsge/Tabletop-RPG-Dice-Roll-Odds-Calculator #
 #                                                                #
 ##################################################################
@@ -12,8 +12,20 @@
 from functools import lru_cache
 import matplotlib.pyplot as plt
 
+# String constants
+NON_NUMERIC_INPUT_WARNING = "Please input only positive integers!"
+IMPOSSIBLE_INPUT_WARNING = "This sum isn't possible with your specified roll."
+GIVEN_ROLL_INFO = "The probability of your throw using {}d{} was {} %\n"
+BEST_ROLL_INFO = "The most probable roll{} with a probability of {} %"
+SINGLE_ROLL = " was a {}"
+MULTIPLE_ROLLS = "s were a {} or {}"
+PLOT_TITLE =  "Dice sum probabilities"
+PLOT_XLABEL = "Dice sum\n\n"
+PLOT_YLABEL = "Probability / %"
+
+
 while True:
-    # Determining input
+    # Determine input.
     print("----------------------------------------------------\n"
           "Welcome to the ndm dice sums propability calculator.\n"
           "This shows you the probability for your dice roll,\n"
@@ -26,26 +38,26 @@ while True:
             rolls = int(rolls)
             if rolls > 0:
                 break
-        print("Please input only positive integers!")
+        print(NON_NUMERIC_INPUT_WARNING)
     while True:
         sides = input("How many sides? ")
         if sides.isdigit():
             sides = int(sides)
             if sides > 0:
                 break
-        print("Please input only positive integers!")
+        print(NON_NUMERIC_INPUT_WARNING)
     while True:
         playersum = input("What is your sum? ")
         if playersum.isdigit():
             playersum = int(playersum)
             if playersum >= rolls and playersum <= sides * rolls:
                 break
-            print("This sum isn't possible with your specified roll.")
+            print(IMPOSSIBLE_INPUT_WARNING)
         else:
-            print("Please input only integers!")
+            print(NON_NUMERIC_INPUT_WARNING)
 
     print("\n\n\n")
-    # Calculation functions
+    # Calculate functions.
     @lru_cache(None)
     def sum_freq(total, rolls, faces):
         if not rolls:
@@ -55,27 +67,27 @@ while True:
     def probability_calculator(roll_total, num_of_rolls, dice_faces):
         return sum_freq(roll_total, num_of_rolls, dice_faces) / dice_faces ** num_of_rolls
 
-    # Preparing plot data
+    # Prepare plot data.
     sums = []
     probabilities = []
     for i in range(rolls, rolls * sides + 1):
         sums.append(i)
         probabilities.append(round(probability_calculator(i, rolls, sides) * 100, 6))
-    info_str = "The probability of your throw using {}d{} was {} %\n".format(rolls, sides, probabilities[playersum - rolls])
+    info_str = GIVEN_ROLL_INFO.format(rolls, sides, probabilities[playersum - rolls])
 
-    # Finding maximum/a
+    # Find maximum/a.
     maximum = max(probabilities)
     max_ind = probabilities.index(maximum)
     if probabilities[max_ind + 1] != maximum:
-        info_str += "The highest probability is rolling a {} with a probability of {} %".format(sums[max_ind], maximum)
+        info_str += BEST_ROLL_INFO.format(SINGLE_ROLL.format(sums[max_ind]), maximum)
     else:
-        info_str += "The highest probabilities are for rolling a {} or {} with a probability of {} %".format(sums[max_ind], sums[max_ind] + 1, maximum)
+        info_str += BEST_ROLL_INFO.format(MULTIPLE_ROLLS.format(sums[max_ind], sums[max_ind] + 1), maximum)
 
-    # Plotting
-    plt.title("Dice sum probabilities")
-    plt.xlabel("Dice sum\n\n" + info_str)
-    plt.ylabel("Probability / %")
-    #plt.text(sums[len(sums) - 1] / 2, probabilities[1], info_str, horizontalalignment='center') # For putting it in the graph itself
+    # Plot.
+    plt.title(PLOT_TITLE)
+    plt.xlabel(PLOT_XLABEL + info_str)
+    plt.ylabel(PLOT_YLABEL)
+    #plt.text(sums[len(sums) - 1] / 2, probabilities[1], info_str, horizontalalignment='center') # For putting info_str in the graph itself.
     plt.plot(sums, probabilities, "r+")
     plt.vlines(playersum, 0, maximum)
     plt.tight_layout()
